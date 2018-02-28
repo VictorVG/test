@@ -1,1 +1,0 @@
-@echo off & reg add "HKCU\SOFTWARE\Policies\Microsoft\Windows\Explorer" /v DisableThumbsDBOnNetworkFolders /d 0x1 /t REG_DWORD /f > nul & reg add "HKCU\SOFTWARE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v NoThumbnailCache /d 0x1 /t REG_DWORD /f > nul & exit
