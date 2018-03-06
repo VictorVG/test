@@ -6,8 +6,8 @@
 -- v1.1, Refactoring, add macro for delete branch
 -- 26.02.2018 21:01:45 +0300
 --
--- v1.2, Add new macros for customize git command, save/restore command prompt, refactoring.
--- 06.03.2018 03:25:53 +0300
+-- v1.2, Add new macros for GitShell command, refactoring.
+-- 06.03.2018 06.03.2018 06:10:12 +0300
 
 local GSID  = "BE0B1498-4234-4BE1-B257-7653CAF4F091";
 local GSMID = "0B7813BD-DEC1-4866-B20E-F5C49FF4AFA0";
@@ -62,33 +62,4 @@ Macro{
   key="AltShiftL";
   description="GitShell current file history";
   action=function() Far.DisableHistory(-1) Plugin.Command(GSID,'log'..APanel.Current) end;
-}
-
-Macro{
-  id="D2F7F8EF-FA31-4DBE-AAD5-82FC3E146B55";
-  area="Shell";
-  key="AltShiftP";
-  description="Git push";
-  action=function()
-  Far.DisableHistory(-1) local bcmd=mf.trim(CmdLine.Value);
-   if not CmdLine.Empty then bcmd=mf.trim(CmdLine.Value) Keys("Esc") end;
-     mf.print("git push"..mf.prompt("Push parameters","",0x00000001,"","Prm").."origin HEAD") Keys("Enter");
-   mf.print(bcmd)
-end;
-}
-
-Macro{
-  id="19EB20E3-E67E-467F-8D60-109E0410010C";
-  area="Shell";
-  key="AltShiftW";
-  description="Git push commit and tag";
-  action=function()
-  Far.DisableHistory(-1)
-  local bcmd=mf.trim(CmdLine.Value);
-  if not CmdLine.Empty then bcmd=mf.trim(CmdLine.Value) Keys("Esc") end;
-   mf.print('git tag -a '.."mf.prompt(tgn,'',0x00000001,'','tgnh')"..' -m '.."mf.prompt(cmt,'',0x00000001,'','cmth')")
-    mf.print("git push"..mf.prompt("Push parameters","",0x00000001,"","Prm").."origin HEAD") Keys("Enter")
-   mf.print("git push origin HEAD --tag") Keys("Enter");
-  mf.print(bcmd)
-end;
 }
