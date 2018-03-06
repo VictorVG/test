@@ -1,7 +1,7 @@
 -- v1.0, Initial release
 -- VictorVG @ Viksoft.Ru, 02.03.2018 21:53:58 +0300
 --
--- v1.1, Save/restore command prompt, customize git-gc(1) parameters, refactoring
+-- v1.1, Save and restore command prompt, customize git-gc(1) parameters, refactoring
 -- VictorVG @ Viksoft.Ru, 06.03.2018 04:33:21 +0300
 
 Macro{
