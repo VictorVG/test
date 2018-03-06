@@ -70,10 +70,10 @@ Macro{
   key="AltShiftP";
   description="GitShell commit and push";
   action=function()
-  Far.DisableHistory(-1) Plugin.Command(GSID,'commit')
-  local bcmd=mf.trim(CmdLine.Value);
+  Far.DisableHistory(-1) local bcmd=mf.trim(CmdLine.Value);
    if not CmdLine.Empty then bcmd=mf.trim(CmdLine.Value) Keys("Esc") end;
-     mf.print("git push"..mf.prompt("Push parameters","",0x00000001,"","Prm").."origin HEAD") Keys("Enter")
+     Plugin.Command(GSID,'commit')
+     mf.print("git push"..mf.prompt("Push parameters","",0x00000001,"","Prm").."origin HEAD") Keys("Enter");
    mf.print(bcmd)
 end;
 }
@@ -84,12 +84,13 @@ Macro{
   key="AltShiftW";
   description="GitShell release master";
   action=function()
-  Far.DisableHistory(-1) Plugin.Command(GSID,'commit')
+  Far.DisableHistory(-1)
   local bcmd=mf.trim(CmdLine.Value);
   if not CmdLine.Empty then bcmd=mf.trim(CmdLine.Value) Keys("Esc") end;
+  Plugin.Command(GSID,'commit')
    mf.print('git tag -a '.."mf.prompt(tgn,'',0x00000001,'','tgnh')"..' -m '.."mf.prompt(cmt,'',0x00000001,'','cmth')")
     mf.print("git push"..mf.prompt("Push parameters","",0x00000001,"","Prm").."origin HEAD") Keys("Enter")
-   mf.print("git push origin HEAD --tag") Keys("Enter")
+   mf.print("git push origin HEAD --tag") Keys("Enter");
   mf.print(bcmd)
 end;
 }
