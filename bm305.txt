@@ -1,0 +1,190 @@
+shmuz
+
+Victor_VG
+
+Из любопытства поставил, чтобы попробовать создать пустую закладку - не получилось.
+Зато вылезло другое - если в меню скрипта нажать Del на любой папке из переменных окружения, падает.
+
+Отправлено: 22:12 16-08-2021
+
+поглядел на b5677 (всё одно проверять что скомпилилось:)) - скопировал отдельно Far + LuaMacro, в профиль кинул
+
+./scripts/
+BookmarkManager.lua  v3.0.5
+BookmarkManagerEng.hlf
+BookmarkManagerEng.lng
+BookmarkManagerRus.hlf
+BookmarkManagerRus.lng
+
+/modules/ удалил
+
+вызвал меню Bookmark Manager и попробовал удалить переменную FARLOCALPROFILE - упали с выводом стека:
+
+.\Far\plugins\luamacro\LuaMacro.dll: ...Far\Profile\Macros\scripts\BookmarkManager.lua:269: attempt to index local 'folder' (a nil value)
+stack traceback:
+   ...Far\Profile\Macros\scripts\Shell_BookmarkManager.lua:269: in function 'BM2tbl'
+   ...Far\Profile\Macros\scripts\Shell_BookmarkManager.lua:293: in function 'NiceFolder'
+   ...Far\Profile\Macros\scripts\Shell_BookmarkManager.lua:330: in function 'DelBM'
+   ...Far\Profile\Macros\scripts\Shell_BookmarkManager.lua:598: in function 'BMMenu'
+   ...Far\Profile\Macros\scripts\Shell_BookmarkManager.lua:693: in function 'action'
+   .\Far\plugins\luamacro\LuaMacro.lua:480: in function <.\Far\plugins\luamacro\LuaMacro.lua:429>
+
+
+повторил эксперимент добавив StackTracePlus.lua и Lua Explorer v2.3 чтобы  подровнее посмотреть что происходит, и повторил тот же эксперимент:
+
+
+./scripts/
+
+_macroinit.lua
+BookmarkManager.lua  v3.0.5
+BookmarkManagerEng.hlf
+BookmarkManagerEng.lng
+BookmarkManagerRus.hlf
+BookmarkManagerRus.lng
+
+в  _macroinit.lua
+
+local STP = require("StackTracePlus")
+if STP then debug.traceback = function(...) return string.gsub(STP.stacktrace(...), "\r\n", "\n") end end
+
+в /modules/
+
+le.lua   v2.3
+se.lua
+StackTracePlus.lua
+tooltip.lua
+
+вызвав меню Bookmark Manager и попробовал удалить переменную FARLOCALPROFILE - упали с выводом стека:
+
+
+ .\Far\plugins\luamacro\LuaMacro.dll:  ...Far\Profile\Macros\scripts\BookmarkManager.lua:269: attempt to index local 'folder' (a nil value)
+ Stack Traceback
+ ===============
+ (2) metamethod C function '__index'
+ (3) Lua upvalue 'BM2tbl' at file '.\Far\Profile\Macros\scripts\BookmarkManager.lua:269'
+    Local variables:
+     folder = nil
+     bm = nil
+     lg = nil
+     t = table: 0x02a5c960  {}
+     e = table: 0x02a5c9a8  {}
+     (*temporary) = nil
+     (*temporary) = table: 0x02339d50  {}
+     (*temporary) = nil
+     (*temporary) = nil
+     (*temporary) = userdata: 0x02a5c8e0
+     (*temporary) = nil
+     (*temporary) = nil
+     (*temporary) = number: 1.82241e-316
+     (*temporary) = table: 0x02a5c558  {}
+     (*temporary) = nil
+     (*temporary) = nil
+     (*temporary) = table: 0x02a5c4f8  {1:menu, 2:common}
+     (*temporary) = number: 2
+     (*temporary) = nil
+     (*temporary) = C function: builtin#6
+     (*temporary) = table: 0x025ea7c0  {1:table: 0x02627090}
+     (*temporary) = number: 1
+     (*temporary) = string: "attempt to index local 'folder' (a nil value)"
+ (4) Lua upvalue 'NiceFolder' at file '.\Far\Profile\Macros\scripts\BookmarkManager.lua:293'
+    Local variables:
+     folder = nil
+     (*temporary) = Lua function 'BM2str' (defined at line 259 of chunk ...Far\Profile\Macros\scripts\BookmarkManager.lua)
+     (*temporary) = string: "FARLOCALPROFILE"
+ (5) Lua upvalue 'DelBM' at file '.\Far\Profile\Macros\scripts\BookmarkManager.lua:330'
+    Local variables:
+     bm = string: "FARLOCALPROFILE"
+     dest = nil
+     confirm = boolean: true
+     (*temporary) = C function: 0x02307358
+     (*temporary) = table: 0x02a40ca0  {Title:Менеджер закладок, Flags:3, Bottom:Enter,Esc,CtrlPgDn,ShiftEnter,ShiftF4,F1,F4,F5,Ins,Del,F9 (more...)}
+     (*temporary) = C function: 0x0230a3d8
+     (*temporary) = userdata: 0x02a43178
+     (*temporary) = string: "%sзакладка \"%s\" (%s): удалить?"
+     (*temporary) = string: "Глобальная "
+     (*temporary) = string: "FARLOCALPROFILE"
+ (6) Lua upvalue 'BMMenu' at file '.\Far\Profile\Macros\scripts\BookmarkManager.lua:598'
+    Local variables:
+     mask = nil
+     trail = nil
+     prep_menu = Lua function 'prep' (defined at line 524 of chunk ...Far\Profile\Macros\scripts\BookmarkManager.lua)
+     fill_menu = Lua function 'fill' (defined at line 560 of chunk ...Far\Profile\Macros\scripts\BookmarkManager.lua)
+     Title = string: "Менеджер закладок"
+     Bottom = string: "Enter,Esc,CtrlPgDn,ShiftEnter,ShiftF4,F1,F4,F5,Ins,Del,F9"
+     HotKeys = table: 0x02350078  {1:table: 0x02350128, 2:table: 0x023501a8, 3:table: 0x02350228, 4:table: 0x023502a8 (more...)}
+     pos = number: 10
+     res = table: 0x02350628  {BreakKey:DELETE}
+     listl = table: 0x023510b8  {}
+     listg = table: 0x02351318  {}
+     liste = table: 0x02351360  {1:table: 0x02351780, 2:table: 0x02351c98, 3:table: 0x02352658, 4:table: 0x02352b98 (more...)}
+     maxl = number: 0
+     maxg = number: 0
+     maxe = number: 23
+     items = table: 0x02351190  {1:table: 0x0292ccc0, 2:table: 0x0292cd08, 3:table: 0x0292ce68, 4:table: 0x0292d068 (more...)}
+ (7) Lua field 'action' at file '.\Far\Profile\Macros\scripts\BookmarkManager.lua:693'
+    Local variables: .\Far\plugins\luamacro\LuaMacro.dll:  ...Far\Profile\Macros\scripts\BookmarkManager.lua:269: attempt to index local 'folder' (a nil value)
+ Stack Traceback
+ ===============
+ (2) metamethod C function '__index'
+ (3) Lua upvalue 'BM2tbl' at file '.\Far\Profile\Macros\scripts\BookmarkManager.lua:269'
+    Local variables:
+     folder = nil
+     bm = nil
+     lg = nil
+     t = table: 0x02a5c960  {}
+     e = table: 0x02a5c9a8  {}
+     (*temporary) = nil
+     (*temporary) = table: 0x02339d50  {}
+     (*temporary) = nil
+     (*temporary) = nil
+     (*temporary) = userdata: 0x02a5c8e0
+     (*temporary) = nil
+     (*temporary) = nil
+     (*temporary) = number: 1.82241e-316
+     (*temporary) = table: 0x02a5c558  {}
+     (*temporary) = nil
+     (*temporary) = nil
+     (*temporary) = table: 0x02a5c4f8  {1:menu, 2:common}
+     (*temporary) = number: 2
+     (*temporary) = nil
+     (*temporary) = C function: builtin#6
+     (*temporary) = table: 0x025ea7c0  {1:table: 0x02627090}
+     (*temporary) = number: 1
+     (*temporary) = string: "attempt to index local 'folder' (a nil value)"
+ (4) Lua upvalue 'NiceFolder' at file '.\Far\Profile\Macros\scripts\BookmarkManager.lua:293'
+    Local variables:
+     folder = nil
+     (*temporary) = Lua function 'BM2str' (defined at line 259 of chunk ...Far\Profile\Macros\scripts\BookmarkManager.lua)
+     (*temporary) = string: "FARLOCALPROFILE"
+ (5) Lua upvalue 'DelBM' at file '.\Far\Profile\Macros\scripts\BookmarkManager.lua:330'
+    Local variables:
+     bm = string: "FARLOCALPROFILE"
+     dest = nil
+     confirm = boolean: true
+     (*temporary) = C function: 0x02307358
+     (*temporary) = table: 0x02a40ca0  {Title:Менеджер закладок, Flags:3, Bottom:Enter,Esc,CtrlPgDn,ShiftEnter,ShiftF4,F1,F4,F5,Ins,Del,F9 (more...)}
+     (*temporary) = C function: 0x0230a3d8
+     (*temporary) = userdata: 0x02a43178
+     (*temporary) = string: "%sзакладка \"%s\" (%s): удалить?"
+     (*temporary) = string: "Глобальная "
+     (*temporary) = string: "FARLOCALPROFILE"
+ (6) Lua upvalue 'BMMenu' at file '.\Far\Profile\Macros\scripts\BookmarkManager.lua:598'
+    Local variables:
+     mask = nil
+     trail = nil
+     prep_menu = Lua function 'prep' (defined at line 524 of chunk ...Far\Profile\Macros\scripts\BookmarkManager.lua)
+     fill_menu = Lua function 'fill' (defined at line 560 of chunk ...Far\Profile\Macros\scripts\BookmarkManager.lua)
+     Title = string: "Менеджер закладок"
+     Bottom = string: "Enter,Esc,CtrlPgDn,ShiftEnter,ShiftF4,F1,F4,F5,Ins,Del,F9"
+     HotKeys = table: 0x02350078  {1:table: 0x02350128, 2:table: 0x023501a8, 3:table: 0x02350228, 4:table: 0x023502a8 (more...)}
+     pos = number: 10
+     res = table: 0x02350628  {BreakKey:DELETE}
+     listl = table: 0x023510b8  {}
+     listg = table: 0x02351318  {}
+     liste = table: 0x02351360  {1:table: 0x02351780, 2:table: 0x02351c98, 3:table: 0x02352658, 4:table: 0x02352b98 (more...)}
+     maxl = number: 0
+     maxg = number: 0
+     maxe = number: 23
+     items = table: 0x02351190  {1:table: 0x0292ccc0, 2:table: 0x0292cd08, 3:table: 0x0292ce68, 4:table: 0x0292d068 (more...)}
+ (7) Lua field 'action' at file '.\Far\Profile\Macros\scripts\BookmarkManager.lua:693'
+    Local variables:
